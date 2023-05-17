@@ -2,55 +2,72 @@
 
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Mermaid Gantt Diagram Generator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mermaid@8.11.2/dist/mermaid.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.11.2/dist/mermaid.min.js"></script>
-    <script>
-      // Initialize mermaid
-      mermaid.initialize({
-        startOnLoad: true,
-      });
-
-      // Function to generate the diagram
-      function generateDiagram() {
-        // Get the input values
-        const title = document.getElementById("title").value;
-        const dateFormat = document.getElementById("dateFormat").value;
-        const sections = document.getElementById("sections").value;
-
-        // Generate the mermaid code
-        const code = `gantt
-          title ${title}
-          dateFormat ${dateFormat}
-
-          ${sections}
-        `;
-
-        // Render the diagram
-        const container = document.getElementById("diagram");
-        container.innerHTML = "";
-        mermaid.render("diagram", code, (svgCode) => {
-          container.innerHTML = svgCode;
-        });
+    <style>
+      #canvas {
+        border: 1px solid black;
       }
-    </script>
+    </style>
   </head>
   <body>
-    <h1>Mermaid Gantt Diagram Generator</h1>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <br>
+    <button id="export-png-btn">Export as PNG</button>
+    <button id="export-pdf-btn">Export as PDF</button>
 
-    <label for="title">Diagram Title:</label>
-    <input type="text" id="title" placeholder="Enter the diagram title" />
+    <script>
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+      const exportPngBtn = document.getElementById("export-png-btn");
+      const exportPdfBtn = document.getElementById("export-pdf-btn");
 
-    <label for="dateFormat">Date Format:</label>
-    <input type="text" id="dateFormat" placeholder="Enter the date format (e.g. YYYY-MM-DD)" />
+      let isDrawing = false;
+      let x = 0;
+      let y = 0;
 
-    <label for="sections">Diagram Sections:</label>
-    <textarea id="sections" placeholder="Enter the diagram sections in mermaid syntax"></textarea>
+      canvas.addEventListener("mousedown", event => {
+        isDrawing = true;
+        x = event.clientX;
+        y = event.clientY;
+      });
 
-    <button onclick="generateDiagram()">Generate Diagram</button>
+      canvas.addEventListener("mouseup", () => (isDrawing = false));
 
-    <div id="diagram"></div>
+      canvas.addEventListener("mousemove", event => {
+        if (isDrawing === false) {
+          return;
+        }
+
+        const newX = event.clientX;
+        const newY = event.clientY;
+
+        context.beginPath();
+        context.moveTo(x, y);
+        context.lineTo(newX, newY);
+        context.stroke();
+
+        x = newX;
+        y = newY;
+      });
+
+      exportPngBtn.addEventListener("click", () => {
+        const dataURL = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.download = "canvas.png";
+        link.href = dataURL;
+        link.click();
+      });
+
+      exportPdfBtn.addEventListener("click", () => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, "PNG", 0, 0);
+        pdf.save("canvas.pdf");
+      });
+    </script>
+
+    <!-- Include the jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
   </body>
 </html>
+
 
