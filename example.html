@@ -1,0 +1,21 @@
+<html>
+<head>
+  <title>Пример интерактивных элементов</title>
+</head>
+<body>
+  <h1>Интерактивные элементы</h1>
+
+  <!-- Пример 3: Вращающийся квадрат -->
+  <div id="mySquare"></div>
+
+  <script>
+    // Пример 3: Вращающийся квадрат
+    var square = document.getElementById('mySquare');
+    var rotation = 0;
+    setInterval(function() {
+      rotation += 1;
+      square.style.transform = 'rotate(' + rotation + 'deg)';
+    }, 10);
+  </script>
+</body>
+</html>
