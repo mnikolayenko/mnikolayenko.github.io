@@ -11,25 +11,7 @@
         <script 
         src="https://files.worldwind.arc.nasa.gov/artifactory/web/0.9.0/worldwind.min.js"
         type="text/javascript"></script>
-        <script type="text/javascript">
-            var wwd = new WorldWind.WorldWindow("canvasOne");
-            wwd.navigator.range = 20000000; // zoom out to see the entire country
-
-            var layer = new WorldWind.RenderableLayer("Kazakhstan Border");
-
-            var borderFile = "https://www.ngdc.noaa.gov/mgg/shapefiles/world/nation/kz.shp";
-            var borderConfig = {
-                shapeFile: borderFile,
-                style: {
-                    fillColor: WorldWind.Color.WHITE,
-                    outlineColor: WorldWind.Color.BLACK,
-                    outlineWidth: 1
-                }
-            };
-            var borderShape = new WorldWind.Shapefile(borderConfig);
-            layer.addRenderable(borderShape);
-
-            wwd.addLayer(layer);
+        <script src="helloWorldWind.js" type="text/javascript">
         </script>
     </body>
 </html>
